@@ -10,7 +10,7 @@ import { useAuthStore } from "./store/authStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ResetPasswordPage from "./pages/HomePage";
 import HomePage from "./pages/HomePage";
 
 //protect routes that require authentication

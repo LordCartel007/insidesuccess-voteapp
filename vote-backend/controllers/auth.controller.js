@@ -346,6 +346,9 @@ export const googleLogin = async (req, res) => {
       user.lastLogin = new Date();
       await user.save();
 
+      // ✅ Set token as cookie
+      generateTokenAndSetCookie(res, user._id);
+
       return res.status(200).json({
         success: true,
         message: "Google login successful",
@@ -368,6 +371,9 @@ export const googleLogin = async (req, res) => {
 
     await user.save();
     await sendWelcomeEmail(user.email, user.name);
+
+    // ✅ Set token as cookie
+    generateTokenAndSetCookie(res, user._id);
 
     res.status(201).json({
       success: true,
