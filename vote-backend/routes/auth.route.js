@@ -8,6 +8,7 @@ import {
   resetPassword,
   checkAuth,
   resendVerificationEmail,
+  googleLogin,
 } from "../controllers/auth.controller.js";
 
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -32,5 +33,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 router.post("/resend-verification", resendVerificationEmail);
+
+router.post("/google-login", googleLogin);
 // exporting all the routers here
 export default router;

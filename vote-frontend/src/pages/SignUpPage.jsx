@@ -10,6 +10,8 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import "../components/VideoBackground.css";
 import Footer from "../components/Footer";
+import { useGoogleLogin } from "@react-oauth/google";
+
 const StyledDiv = styled.div`
   height: 100vh;
   width: 100vw;
@@ -20,7 +22,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //destructuring from the auth store
-  const { signup, error, isLoading } = useAuthStore();
+  const { signup, error, isLoading, googlelogin } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -34,13 +36,41 @@ const SignUpPage = () => {
     }
   };
 
+  //googlesignin
+  const googleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Fetch user info from Google's API using the access token
+        const res = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          }
+        );
+        const user = await res.json();
+        console.log("User:", user);
+
+        // Send user data to the backend using zustand auth store
+        const result = await googlelogin(user.email, user.name, user.picture);
+        if (result?.redirectToVerify) {
+          navigate("/verify-email");
+        } else if (result?.success) {
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
+
   return (
     <>
       <Header />
       <StyledDiv className="containervideo">
-        <video autoPlay loop muted playsInline className="background-clip">
+        {/* <video autoPlay loop muted playsInline className="background-clip">
           <source src="" type="video/mp4" />
-        </video>
+        </video> */}
         <div className="content  ">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -91,7 +121,7 @@ const SignUpPage = () => {
                 <PasswordStrengthMeter password={password} />
 
                 <motion.button
-                  className="mt-5 w-full py-3 px-4 
+                  className="mt-5 w-full py-3 px-4 mt-b
           bg-gradient-to-r  from-green-500 to-emerald-600 text-white font-bold 
           rounded-lg  shadow-lg hover:from-green-600 hover:to-emerald-700
           focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
@@ -108,6 +138,17 @@ const SignUpPage = () => {
                   )}
                 </motion.button>
               </form>
+              <p className="text-black"> Or</p>
+              <motion.button
+                onClick={googleSignIn}
+                className="w-full py-3 px-4 bg-gradient-to-r from-green-500
+          to-emerald-600 text-white font-bold rounded-lg shadow-lg
+          hover:from-green-600 hover:to-emerald-700 focus:outline-none 
+          focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
+          focus:ring-offset-gray-900 transition duration duration-200"
+              >
+                Sign In with Google
+              </motion.button>
             </div>
             <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
               <p className="text-sm text-gray-400">

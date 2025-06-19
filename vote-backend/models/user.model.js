@@ -9,11 +9,17 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // Only required if the provider is "credentials"
+      required: function () {
+        return this.provider === "credentials";
+      },
     },
     name: {
       type: String,
       required: true,
+    },
+    picture: {
+      type: String, // Optional, mostly used by Google users
     },
     lastLogin: {
       type: Date,

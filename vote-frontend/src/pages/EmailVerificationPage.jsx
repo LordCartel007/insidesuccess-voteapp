@@ -21,6 +21,17 @@ const EmailVerificationPage = () => {
 
   const [resendCooldown, setResendCooldown] = useState(0);
 
+  const [delayedError, setDelayedError] = useState(null);
+  //delaying error
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setDelayedError(error);
+      }, 2000);
+      return () => clearTimeout(timer); // clean up
+    }
+  }, [error]);
+
   useEffect(() => {
     if (resendCooldown > 0) {
       const timer = setTimeout(() => {
@@ -157,7 +168,7 @@ const EmailVerificationPage = () => {
                   />
                 ))}
               </div>
-              {error && (
+              {delayedError && (
                 <p className="text-red-500 font-semibold mt-2"> {error}</p>
               )}
               <motion.button

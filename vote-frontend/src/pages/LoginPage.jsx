@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -10,6 +10,10 @@ import "../components/VideoBackground.css";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
+// Google sign-in
+
+import { useGoogleLogin } from "@react-oauth/google";
+
 const StyledDiv = styled.div`
   width: 100vw;
   height: 100vh;
@@ -20,7 +24,18 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, googlelogin } = useAuthStore();
+
+  const [delayedError, setDelayedError] = useState(null);
+  //delaying error
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setDelayedError(error);
+      }, 2000);
+      return () => clearTimeout(timer); // clean up
+    }
+  }, [error]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,6 +46,33 @@ const LoginPage = () => {
       navigate("/dashboard");
     }
   };
+
+  const googleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Fetch user info from Google's API using the access token
+        const res = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          }
+        );
+        const user = await res.json();
+        console.log("User:", user);
+
+        // Send user data to the backend using zustand auth store
+        const result = await googlelogin(user.email, user.name, user.picture);
+        if (result?.redirectToVerify) {
+          navigate("/verify-email");
+        } else if (result?.success) {
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
 
   return (
     <>
@@ -83,10 +125,9 @@ const LoginPage = () => {
                       Forgot password?
                     </Link>
                   </div>
-                  {error && (
+                  {delayedError && (
                     <p className="text-red-500 font-semibold mb-2">{error}</p>
                   )}
-
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -107,12 +148,24 @@ const LoginPage = () => {
                       "Login"
                     )}
                   </motion.button>
+                  <p className="text-black"> Or</p>
                 </form>
+                <motion.button
+                  onClick={googleSignIn}
+                  className="w-full py-3 px-4 bg-gradient-to-r from-green-500
+          to-emerald-600 text-white font-bold rounded-lg shadow-lg
+          hover:from-green-600 hover:to-emerald-700 focus:outline-none 
+          focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
+          focus:ring-offset-gray-900 transition duration duration-200"
+                >
+                  Sign In with Google
+                </motion.button>
               </div>
               <div
                 className="px-8 py-4 bg-gray-900 bg-opacity-50
       flex justify-center"
               >
+                {" "}
                 <p className="text-sm text-gray-400">
                   Don't have an account?{" "}
                   <Link to="/signup" className="text-green-400 hover:underline">

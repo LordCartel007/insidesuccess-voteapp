@@ -2,8 +2,8 @@ import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-const API_URL = "https://signup-auth-backend.vercel.app/api/auth";
-const API_URL_TWO = "https://signup-auth-backend.vercel.app/api/auth";
+const API_URL = "http://localhost:5000/api/auth";
+const API_URL_TWO = "http://localhost:5000/api/auth";
 
 axios.defaults.withCredentials = true; // to send cookies with requests
 
@@ -38,11 +38,12 @@ export const useAuthStore = create((set) => ({
   },
 
   verifyEmail: async (code) => {
-    set({ islaoding: true, error: null });
+    set({ isloading: true, error: null });
     try {
       const response = await axios.post(`${API_URL}/verify-email`, {
         code,
       });
+
       set({
         user: response.data.user,
         isAuthenticated: true,
@@ -51,7 +52,7 @@ export const useAuthStore = create((set) => ({
       return response.data;
     } catch (error) {
       set({
-        error: error.response.data.message || "Error verifying email",
+        error: error.response?.data?.message || "Error verifying email",
         isLoading: false,
       });
       throw error;
@@ -83,6 +84,33 @@ export const useAuthStore = create((set) => ({
       const response = await axios.post(`${API_URL}/login`, {
         email,
         password,
+      });
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error) {
+      if (error.response?.data?.redirectToVerify) {
+        return { redirectToVerify: true }; // 👈 your verify route
+      } else {
+        set({
+          error: error.response?.data?.message || "Error logging in",
+          isLoading: false,
+        });
+        toast.error(error.response?.data?.message || "Login failed");
+      }
+    }
+  },
+
+  googlelogin: async (email, name, picture) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.post(`${API_URL}/google-login`, {
+        email,
+        name,
+        picture,
       });
       set({
         user: response.data.user,

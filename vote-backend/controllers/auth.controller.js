@@ -41,6 +41,7 @@ export const signup = async (req, res) => {
       name,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+      provider: "credentials",
     });
 
     // Save the user to the database
@@ -320,6 +321,67 @@ export const checkAuth = async (req, res) => {
     res.status(400).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+//GOOGLE LOGIN
+
+export const googleLogin = async (req, res) => {
+  const { email, name, picture } = req.body;
+
+  if (!email || !name) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing required Google user info",
+    });
+  }
+
+  try {
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // Update last login time
+      user.lastLogin = new Date();
+      await user.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Google login successful",
+        user: {
+          ...user._doc,
+          password: undefined,
+        },
+      });
+    }
+
+    // Create new user if not found
+    user = new User({
+      email: email.toLowerCase(),
+      name,
+      picture,
+      isVerified: true,
+      provider: "google", // To differentiate google sign in from normal and make password not required as in the model schema
+      lastLogin: new Date(),
+    });
+
+    await user.save();
+    await sendWelcomeEmail(user.email, user.name);
+
+    res.status(201).json({
+      success: true,
+      message: "New Google user created and logged in",
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.error("Google login error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error during Google login",
     });
   }
 };
