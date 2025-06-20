@@ -25,6 +25,10 @@
     all users cannot vote since they are sharing the same ip .
 
 
+
+    Hosted Link
+    Frontend : https://insidesuccess-voteapp.vercel.app/
+
     Progress
 
     I didnt quite finish since it takes weeks to complete a fullstack app.
