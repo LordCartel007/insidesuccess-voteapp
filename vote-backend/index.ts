@@ -1,21 +1,20 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 
-import { connectDB } from "./db/connectDB.js";
+import { connectDB } from "./db/connectDB";
 
 // importing all the routes from the auth.route.js file
-import authRoutes from "./routes/auth.route.js";
+import authRoutes from "./routes/auth.route";
 
 const __dirname = path.resolve(); // to get the current directory name
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 500;
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -27,7 +26,7 @@ app.use(express.json()); // to parse json data from the request body
 app.use(cookieParser()); // to parse cookies from the request
 
 // Middleware to check if the database is connected
-app.use(async (req, res, next) => {
+app.use(async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Log before trying to connect
     console.log("Attempting to connect to the database...");

@@ -1,4 +1,6 @@
-import { User } from "../models/user.model.js";
+// @ts-nocheck
+import { User } from "../models/user.model";
+import { Request, Response } from "express";
 
 import crypto from "crypto"; // for generating random tokens
 
@@ -11,11 +13,16 @@ import {
   sendWelcomeEmail,
   sendPasswordResetEmail,
   sendResetSuccessEmail,
-} from "../mailtrap/emails.js";
+} from "../mailtrap/emails";
 
-export const signup = async (req, res) => {
-  const email = req.body.email.toLowerCase(); // 👈 making email lower case
-  const { password, name } = req.body;
+// Types for responses
+interface AuthRequest extends Request {
+  userId?: string;
+}
+
+export const signup = async (req: Request, res: Response) => {
+  const email = (req.body.email as string).toLowerCase(); // 👈 making email lower case
+  const { password, name } = req.body as { password: string; name: string };
   try {
     if (!email || !password || !name) {
       throw new Error("All fields are required");
@@ -53,16 +60,19 @@ export const signup = async (req, res) => {
 
     await sendVerificationEmail(user.email, verificationToken);
 
+    const userObj = user.toObject();
+    userObj.password = undefined;
     res.status(201).json({
       success: true,
       message: "User created successfully",
       // spreading the user object to get all the user data then making the password null
-      user: {
-        ...user._doc,
-        password: undefined,
-      },
+      // user: {
+      //   ...user._doc,
+      //   password: undefined,
+      // },
+      user: userObj,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({
       success: false,
       message: error.message,
@@ -71,8 +81,8 @@ export const signup = async (req, res) => {
 };
 
 // controllers/authController.js
-export const resendVerificationEmail = async (req, res) => {
-  const { email } = req.body;
+export const resendVerificationEmail = async (req: Request, res: Response) => {
+  const { email } = req.body as { email: string };
 
   try {
     // Find existing user
@@ -97,7 +107,9 @@ export const resendVerificationEmail = async (req, res) => {
     ).toString();
 
     user.verificationToken = verificationToken;
-    user.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+    user.verificationTokenExpiresAt = new Date(
+      Date.now() + 24 * 60 * 60 * 1000
+    ); // 24 hours
     await user.save();
 
     // Send email
@@ -115,9 +127,9 @@ export const resendVerificationEmail = async (req, res) => {
   }
 };
 
-export const verifyEmail = async (req, res) => {
+export const verifyEmail = async (req: Request, res: Response) => {
   // 1 2 3 4 5 6
-  const { code } = req.body;
+  const { code } = req.body as { code: string };
   try {
     const user = await User.findOne({
       verificationToken: code,
@@ -159,9 +171,9 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
-  const email = req.body.email.toLowerCase();
-  const { password } = req.body;
+export const login = async (req: Request, res: Response) => {
+  const email = (req.body.email as string).toLowerCase();
+  const { password } = req.body as { password: string };
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -201,7 +213,7 @@ export const login = async (req, res) => {
         password: undefined,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in login:", error);
     res.status(400).json({
       success: false,
@@ -210,7 +222,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
@@ -226,8 +238,8 @@ export const logout = async (req, res) => {
   }
 };
 
-export const forgotPassword = async (req, res) => {
-  const { email } = req.body;
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body as { email: string };
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
     //CHECKING IF THE USER EXISTS
@@ -257,7 +269,7 @@ export const forgotPassword = async (req, res) => {
       success: true,
       message: "Password reset link sent to your email",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in forgot password:", error);
     res.status(400).json({
       success: false,
@@ -267,10 +279,10 @@ export const forgotPassword = async (req, res) => {
 };
 
 //reset password
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req: Request, res: Response) => {
   try {
-    const { token } = req.params;
-    const { password } = req.body;
+    const { token } = req.params as { token: string };
+    const { password } = req.body as { password: string };
 
     // find the user and change token
     const user = await User.findOne({
@@ -295,7 +307,7 @@ export const resetPassword = async (req, res) => {
     res
       .status(200)
       .json({ sucess: true, message: "Password reset successfully" });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in reset password:", error);
     res.status(400).json({
       success: false,
@@ -305,7 +317,7 @@ export const resetPassword = async (req, res) => {
 };
 
 //checking if user is authenticated
-export const checkAuth = async (req, res) => {
+export const checkAuth = async (req: AuthRequest, res: Response) => {
   try {
     // removing password from the user object by using select -password
     const user = await User.findById(req.userId).select("-password");
@@ -316,7 +328,7 @@ export const checkAuth = async (req, res) => {
       });
     }
     res.status(200).json({ sucess: true, user });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in checkAuth:", error);
     res.status(400).json({
       success: false,
@@ -327,7 +339,7 @@ export const checkAuth = async (req, res) => {
 
 //GOOGLE LOGIN
 
-export const googleLogin = async (req, res) => {
+export const googleLogin = async (req: Request, res: Response) => {
   const { email, name, picture } = req.body;
 
   if (!email || !name) {
@@ -383,7 +395,7 @@ export const googleLogin = async (req, res) => {
         password: undefined,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Google login error:", error.message);
     res.status(500).json({
       success: false,

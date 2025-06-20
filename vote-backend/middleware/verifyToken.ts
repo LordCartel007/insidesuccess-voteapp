@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
 export const verifyToken = (req, res, next) => {
   // We using req.cookies.token  cause we used it to sign the first token from generateTokenAndSetCookie function

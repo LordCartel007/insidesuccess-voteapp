@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, ReactNode } from "react";
 import FloatingShape from "./components/FloatingShape";
 import { Route, Routes, Navigate } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
@@ -13,8 +13,17 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/HomePage";
 import HomePage from "./pages/HomePage";
 
+// Define types for ProtectedRoute and RedirectAuthenticatedUser props
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+interface RedirectAuthenticatedUserProps {
+  children: ReactNode;
+}
+
 //protect routes that require authentication
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   console.log(isAuthenticated);
@@ -29,10 +38,12 @@ const ProtectedRoute = ({ children }) => {
 };
 
 //redirect authenticated users to the home page
-const RedirectAuthenticatedUser = ({ children }) => {
+const RedirectAuthenticatedUser: React.FC<RedirectAuthenticatedUserProps> = ({
+  children,
+}) => {
   const { isAuthenticated, user } = useAuthStore();
 
-  if (isAuthenticated && user.isVerified) {
+  if (isAuthenticated && user?.isVerified) {
     return <Navigate to="/" replace />;
   }
 

@@ -22,10 +22,7 @@ const StyledDiv = styled.div`
 `;
 
 const DashboardPage: React.FC = () => {
-  const { user, logout } = useAuthStore() as {
-    user: User;
-    logout: () => void;
-  };
+  const { user, logout } = useAuthStore();
 
   const handleLogout = async () => {
     logout();
@@ -82,8 +79,14 @@ const DashboardPage: React.FC = () => {
                 >
                   Profile Information
                 </h3>
-                <p className="text-gray-300"> Name: {user.name}</p>
-                <p className="text-gray-300"> Email: {user.email}</p>
+                <p className="text-gray-300">
+                  {" "}
+                  Name: {user ? user.name : "Not logged in"}
+                </p>
+                <p className="text-gray-300">
+                  {" "}
+                  Email: {user ? user.name : "Not logged in"}
+                </p>
               </motion.div>
               <motion.div
                 className="p-4 bg-gray-800 bg-opacity-50
@@ -100,15 +103,17 @@ const DashboardPage: React.FC = () => {
                 </h3>
                 <p className="text-gray-300">
                   <span className="font-bold"> Joined: </span>
-                  {new Date(user.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {user
+                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "Not logged in"}
                 </p>
                 <p className="text-gray-300">
                   <span className="font-bold"> Last Login: </span>
-                  {formatDate(user.lastLogin)}
+                  {user ? formatDate(user.lastLogin) : "Not logged in"}
                 </p>
               </motion.div>
             </div>
