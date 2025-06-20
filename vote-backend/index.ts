@@ -67,12 +67,12 @@ app.use("/api/auth", authRoutes);
 //   });
 // }
 
-console.log("Serving frontend from:", path.join(__dirname, "frontend", "dist"));
+// console.log("Serving frontend from:", path.join(__dirname, "frontend", "dist"));
 
-// app.listen(PORT, () => {
-//   connectDB();
-//   console.log("Server is running on port:", PORT);
-// });
+app.listen(PORT, () => {
+  connectDB();
+  console.log("Server is running on port:", PORT);
+});
 
-//app needs to be exported for vercel to work
+// app needs to be exported for vercel to work
 export default app;
