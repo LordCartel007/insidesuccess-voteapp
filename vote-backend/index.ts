@@ -15,12 +15,32 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 500;
+
+const allowedOrigins = [
+  "http://localhost:5173", // or whatever your local frontend origin is
+  "https://insidesuccess-voteapp.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "https://insidesuccess-voteapp.vercel.app",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
-); // to allow cross-origin requests
+);
+// app.use(
+//   cors({
+//     origin: "https://insidesuccess-voteapp.vercel.app",
+//     credentials: true,
+//   })
+// ); // to allow cross-origin requests
 
 app.use(express.json()); // to parse json data from the request body
 app.use(cookieParser()); // to parse cookies from the request

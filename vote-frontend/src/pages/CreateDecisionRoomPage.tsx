@@ -96,7 +96,7 @@ const CreateDecisionRoomPage: React.FC = () => {
           />
         </video>
 
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 px-2">
+        <div className="flex  items-center justify-center min-h-screen bg-gray-50 px-2">
           <form
             className="w-full max-w-lg bg-white p-8 rounded-xl shadow-lg space-y-5"
             onSubmit={handleSubmit}

@@ -106,7 +106,7 @@ export default function Header() {
     <StyledHeader>
       <Center>
         <Wrapper>
-          <Logo to={"/"}>Cartel Ai</Logo>
+          <Logo to={"/"}>Inside Success</Logo>
 
           <NavOverlay
             $mobileNavActive={mobileNavActive}
