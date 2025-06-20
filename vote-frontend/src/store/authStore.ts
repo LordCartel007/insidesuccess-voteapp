@@ -2,8 +2,9 @@ import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 
-const API_URL = "http://localhost:5000/api/auth";
-const API_URL_TWO = "http://localhost:5000/api/auth";
+const API_URL = "https://insidesuccess-voteapp-backend.onrender.com/api/auth";
+const API_URL_TWO =
+  "https://insidesuccess-voteapp-backend.onrender.com/api/auth";
 
 axios.defaults.withCredentials = true; // to send cookies with requests
 

@@ -8,7 +8,13 @@
 
     Technology Used jwt, aws s3 buscket, react vite , mongo db , mongoose, express , react google auth, tailwind , css , styledcomponent css
     nodejs, reaxt toast, axios,  framer-motion, lucide-react, multiparty, react, react-dom, react-hot-toast, react-router-dom, sortablejs
-    tailwindcss, zustand, typescript etc
+    tailwindcss, zustand, typescript , "bcryptjs", "cookie-parser",   "cors",  "crypto",  "dotenv",  "express",   "jsonwebtoken",  "mailtrap",
+      "mongoose", "nodemailer"
+
+
+
+
+
 
     Taught Process
 
@@ -28,6 +34,8 @@
 
     Hosted Link
     Frontend : https://insidesuccess-voteapp.vercel.app/
+    Backend : https://insidesuccess-voteapp-backend.onrender.com/
+
 
     Progress
 
