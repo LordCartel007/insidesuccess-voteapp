@@ -75,4 +75,6 @@ app.use("/api/auth", authRoutes);
 // });
 
 // app needs to be exported for vercel to work
-export default app;
+// export default app; //for local
+
+module.exports = app; // for vercel compatibility
