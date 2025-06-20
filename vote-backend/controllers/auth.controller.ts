@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { User } from "../models/user.model";
-import { Request, Response } from "express";
+import { User } from "../models/user.model.js";
+import express, { Request, Response } from "express";
 
 import crypto from "crypto"; // for generating random tokens
 
@@ -13,7 +13,7 @@ import {
   sendWelcomeEmail,
   sendPasswordResetEmail,
   sendResetSuccessEmail,
-} from "../mailtrap/emails";
+} from "../mailtrap/emails.js";
 
 // Types for responses
 interface AuthRequest extends Request {
@@ -400,6 +400,90 @@ export const googleLogin = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Internal server error during Google login",
+    });
+  }
+};
+
+// GET /api/users - fetch all users (excluding password)
+// Named function for fetching users
+export const userFetcher = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find().select(
+      "-password -verificationToken -verificationTokenExpiresAt -resetPasswordToken -resetPasswordExpiresAt"
+    );
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch users",
+    });
+  }
+};
+
+export const createDecisionRoom = async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      description,
+      votingOptions,
+      expiry,
+      email,
+    }: {
+      name: string;
+      description: string;
+      votingOptions: string[];
+      expiry: string;
+      email: string;
+    } = req.body;
+
+    // Validate required fields
+
+    if (!email || !name || !description || !votingOptions || !expiry) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
+    }
+
+    // Ensure votingOptions has 2 to 5 items
+    if (votingOptions.length < 2 || votingOptions.length > 5) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Options must be between 2 and 5" });
+    }
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Add the new decision to user's decisions array
+    const newDecision = {
+      decisionname: name,
+      decisiondescription: description,
+      decisionoptions: votingOptions,
+      decisionexpiryTime: expiry,
+      decisionvoteCount: 0,
+    };
+
+    user.decisions.push(newDecision);
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Decision room created successfully",
+      decision: newDecision,
+    });
+  } catch (error) {
+    console.error("Error creating decision room:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
     });
   }
 };

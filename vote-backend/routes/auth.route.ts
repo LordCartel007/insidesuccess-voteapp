@@ -10,6 +10,8 @@ import {
   checkAuth,
   resendVerificationEmail,
   googleLogin,
+  createDecisionRoom,
+  userFetcher,
 } from "../controllers/auth.controller.js";
 
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -36,5 +38,10 @@ router.post("/reset-password/:token", resetPassword);
 router.post("/resend-verification", resendVerificationEmail);
 
 router.post("/google-login", googleLogin);
+
+router.post("/createDecisionRoom", createDecisionRoom);
+
+router.get("/userFetcher", userFetcher);
+
 // exporting all the routers here
 export default router;

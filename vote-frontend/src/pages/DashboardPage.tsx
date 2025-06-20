@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import styled from "styled-components";
 import "../components/VideoBackground.css";
 import Footer from "../components/Footer";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 
 interface User {
   name: string;
@@ -23,6 +23,7 @@ const StyledDiv = styled.div`
 
 const DashboardPage: React.FC = () => {
   const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     logout();
@@ -43,9 +44,12 @@ const DashboardPage: React.FC = () => {
     <>
       <Header />
       <StyledDiv className="containervideo">
-        {/* <video autoPlay loop muted playsInline className="background-clip">
-          <source src="" type="video/mp4" />
-        </video> */}
+        <video autoPlay loop muted playsInline className="background-clip">
+          <source
+            src="https://cartel-next-ecommerce.s3.eu-north-1.amazonaws.com/MAGNIFICA+-+LISA+%26+ZENDAYA+x+B.ZERO1+IN+BVLGARI'S+NEW+BRAND+CAMPAIGN+-+Bvlgari+(1080p%2C+h264).mp4"
+            type="video/mp4"
+          />
+        </video>
         <div className="content">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -85,7 +89,7 @@ const DashboardPage: React.FC = () => {
                 </p>
                 <p className="text-gray-300">
                   {" "}
-                  Email: {user ? user.name : "Not logged in"}
+                  Email: {user ? user.email : "Not logged in"}
                 </p>
               </motion.div>
               <motion.div
@@ -124,15 +128,30 @@ const DashboardPage: React.FC = () => {
               className="mt-4"
             >
               <motion.button
-                className=" max-w-md w-full py-3 px-4 bg-gradient-to-r from-green-500
-       to-emerald-600 text-white  rounded-lg shadow-lg
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/create-decision-room")}
+                className="button w-full py-3 px-4 bg-gradient-to-r from-green-500
+       to-emerald-600 text-white font-bold rounded-lg shadow-lg
        hover:from-green-600 hover:to-emerald-700
        focus:outline-none focus:ring-2 focus:ring-green-500
-       focus:ring-offset-2 focus:ring-offset-gray-900 font-extrabold 
+       focus:ring-offset-2 focus:ring-offset-gray-900 mt-3
        "
-                onClick={handleLink}
               >
-                <h1> Visit Ai</h1>
+                Create Decision Room
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/all-decisions")}
+                className="button w-full py-3 px-4 bg-gradient-to-r from-green-500
+       to-emerald-600 text-white font-bold rounded-lg shadow-lg
+       hover:from-green-600 hover:to-emerald-700
+       focus:outline-none focus:ring-2 focus:ring-green-500
+       focus:ring-offset-2 focus:ring-offset-gray-900 mt-3
+       "
+              >
+                View All Votes
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}

@@ -7,16 +7,35 @@ const API_URL_TWO = "http://localhost:5000/api/auth";
 
 axios.defaults.withCredentials = true; // to send cookies with requests
 
+interface Decision {
+  _id: string;
+  decisionname: string;
+  decisiondescription: string;
+  decisionoptions: string[];
+  decisionvoteCount: number;
+  decisionexpiryTime: string;
+  createdAt: string;
+  updatedAt: string;
+  // add other fields as needed
+}
+
 interface User {
   email: string;
   name: string;
-  picture?: string;
+  _id: string;
   [key: string]: any;
+  createdAt: string;
+  lastLogin: string;
+  isVerified: boolean;
+  decisions: Decision[];
 }
 
 interface AuthStore {
+  allUsers: User[] | null; // <-- add this
+  fetchUsers: () => Promise<void>; // <-- add this
   user: User | null;
   isAuthenticated: boolean;
+
   error: string | null;
   isLoading: boolean;
   isCheckingAuth: boolean;
@@ -29,7 +48,17 @@ interface AuthStore {
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
+  createDecisionRoom: (
+    name: string,
+    description: string,
+    expiry: number,
+    votingOptions: VotingOption[],
+    email: string
+  ) => Promise<void>;
+  success: boolean;
 }
+
+type VotingOption = { id: number; value: string };
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
@@ -38,6 +67,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isLoading: false,
   isCheckingAuth: true,
   message: null,
+  success: false,
+  allUsers: [],
 
   signup: async (email, password, name) => {
     set({ isLoading: true, error: null });
@@ -221,6 +252,53 @@ export const useAuthStore = create<AuthStore>((set) => ({
         isLoading: false,
         error: error.response?.data?.message || "Error resetting password",
       });
+      throw error;
+    }
+  },
+
+  fetchUsers: async () => {
+    try {
+      const res = await axios.get<{ success: boolean; users: User[] }>(
+        `${API_URL}/userFetcher`
+      );
+      if (res.data.success) {
+        set({ allUsers: res.data.users });
+      } else {
+        set({ allUsers: null });
+      }
+    } catch (error) {
+      set({ allUsers: null });
+    }
+  },
+
+  createDecisionRoom: async (
+    name: string,
+    description: string,
+    expiry: number,
+    votingOptions: { id: number; value: string }[],
+    email: string
+  ) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.post(`${API_URL}/createDecisionRoom`, {
+        name,
+        description,
+        expiry,
+        votingOptions: votingOptions.map((opt: any) => opt.value),
+        email,
+      });
+      set({ isLoading: false, error: null });
+      toast.success("Decision room created!");
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      set({
+        error: error.response?.data?.message || "Error creating decision room",
+        isLoading: false,
+        success: false,
+      });
+      toast.error(
+        error.response?.data?.message || "Error creating decision room"
+      );
       throw error;
     }
   },

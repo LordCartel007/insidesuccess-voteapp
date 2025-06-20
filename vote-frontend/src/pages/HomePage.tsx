@@ -123,31 +123,21 @@ const HomePage: React.FC = () => {
       <Header />
 
       <div className="containervideothree">
-        {/* <StyledVideo
+        <StyledVideo
           autoPlay
           loop
           muted
           playsInline
           className="background-clip"
         >
-          <source src="" type="video/mp4" />
-        </StyledVideo> */}
+          <source
+            src="https://cartel-next-ecommerce.s3.eu-north-1.amazonaws.com/MAGNIFICA+-+LISA+%26+ZENDAYA+x+B.ZERO1+IN+BVLGARI'S+NEW+BRAND+CAMPAIGN+-+Bvlgari+(1080p%2C+h264).mp4"
+            type="video/mp4"
+          />
+        </StyledVideo>
         <div className="content">
           <div className="">
-            <Title>The Ai You can trust</Title>
-            <Pwords>
-              {" "}
-              Cartel Ai can talk , read Pdf or any file you input , she can open
-              websites with voice recognition, you can gist with her and she
-              says the best joke,
-            </Pwords>
-            <Pwords>
-              She can solve maths equation if you send her the pics, So she is a
-              chat and speak bot
-            </Pwords>
-            <Pwords>
-              Use the sign up / login button to have access to the bot for free
-            </Pwords>
+            <Title>Inside Success Vote App</Title>
           </div>
         </div>
         <div className="flex justify-center font-extrabold ">

@@ -8,10 +8,11 @@ import EmailVerificationPage from "./pages/EmailVerificationPage";
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore";
 import LoadingSpinner from "./components/LoadingSpinner";
-
+import AllDecisionPage from "./pages/AllDecision";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/HomePage";
 import HomePage from "./pages/HomePage";
+import CreateDecisionRoomPage from "./pages/CreateDecisionRoomPage";
 
 // Define types for ProtectedRoute and RedirectAuthenticatedUser props
 interface ProtectedRouteProps {
@@ -98,6 +99,11 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
+          <Route
+            path="/create-decision-room"
+            element={<CreateDecisionRoomPage />}
+          />
+          <Route path="/all-decisions" element={<AllDecisionPage />} />
           <Route
             path="/reset-password/:token"
             element={

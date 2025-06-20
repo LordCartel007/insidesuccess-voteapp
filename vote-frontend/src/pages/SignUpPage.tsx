@@ -68,9 +68,12 @@ const SignUpPage = () => {
     <>
       <Header />
       <StyledDiv className="containervideo">
-        {/* <video autoPlay loop muted playsInline className="background-clip">
-          <source src="" type="video/mp4" />
-        </video> */}
+        <video autoPlay loop muted playsInline className="background-clip">
+          <source
+            src="https://cartel-next-ecommerce.s3.eu-north-1.amazonaws.com/MAGNIFICA+-+LISA+%26+ZENDAYA+x+B.ZERO1+IN+BVLGARI'S+NEW+BRAND+CAMPAIGN+-+Bvlgari+(1080p%2C+h264).mp4"
+            type="video/mp4"
+          />
+        </video>
         <div className="content  ">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -152,7 +155,7 @@ const SignUpPage = () => {
                 Sign In with Google
               </motion.button>
             </div>
-            <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
+            <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center p-4">
               <p className="text-sm text-gray-400">
                 Already have an account?{" "}
                 <Link to={"/login"} className="text-green-400 hover:underline">

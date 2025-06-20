@@ -4,10 +4,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 
-import { connectDB } from "./db/connectDB";
+import { connectDB } from "./db/connectDB.js";
 
 // importing all the routes from the auth.route.js file
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./routes/auth.route.js";
 
 const __dirname = path.resolve(); // to get the current directory name
 

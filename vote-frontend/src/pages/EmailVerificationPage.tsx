@@ -108,10 +108,10 @@ const EmailVerificationPage = () => {
       await axios.post(
         `${"https://signup-auth-backend.vercel.app/api/auth"}/resend-verification`,
         {
-          email: user.email,
+          email: user?.email,
         }
       );
-      console.log("Resending to email:", user.email);
+      console.log("Resending to email:", user?.email);
       toast.success("Verification email resent!");
       setCanResend(false);
       setTimeout(() => setCanResend(true), 60000);
@@ -128,7 +128,10 @@ const EmailVerificationPage = () => {
   return (
     <StyledDiv className="containervideo">
       <video autoPlay loop muted playsInline className="background-clip">
-        <source src="" type="video/mp4" />
+        <source
+          src="https://cartel-next-ecommerce.s3.eu-north-1.amazonaws.com/MAGNIFICA+-+LISA+%26+ZENDAYA+x+B.ZERO1+IN+BVLGARI'S+NEW+BRAND+CAMPAIGN+-+Bvlgari+(1080p%2C+h264).mp4"
+          type="video/mp4"
+        />
       </video>
       <div className="content">
         <div
