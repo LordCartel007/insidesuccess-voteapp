@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 500;
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://insidesuccess-voteapp.vercel.app",
     credentials: true,
   })
 ); // to allow cross-origin requests
@@ -69,10 +69,10 @@ app.use("/api/auth", authRoutes);
 
 console.log("Serving frontend from:", path.join(__dirname, "frontend", "dist"));
 
-app.listen(PORT, () => {
-  connectDB();
-  console.log("Server is running on port:", PORT);
-});
+// app.listen(PORT, () => {
+//   connectDB();
+//   console.log("Server is running on port:", PORT);
+// });
 
 //app needs to be exported for vercel to work
 export default app;
