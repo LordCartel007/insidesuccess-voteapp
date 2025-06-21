@@ -1,3 +1,5 @@
+    I used typescript as requested.
+
     The web app contains a login with email and password using jwt and bycrpt, google signin , a vote creator and a vote , each
     route is protected by the back end so any body cannot just visit.
     Passwords are hashed with bcrypt, there is a password strength meter
