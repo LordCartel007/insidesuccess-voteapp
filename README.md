@@ -12,13 +12,8 @@ password reset email and password reset success emails are sent
 automatically.
 
 Technology Used jwt, aws s3 bucket, react vite , mongo db , mongoose, express , react google auth, tailwind , css , styledcomponent css
-nodejs, reaxt toast, axios,  framer-motion, lucide-react, multiparty, react, react-dom, react-hot-toast, react-router-dom, sortablejs
-tailwindcss, zustand, typescript , "bcryptjs", "cookie-parser",   "cors",  "crypto",  "dotenv",  "express",   "jsonwebtoken",  "mailtrap", "mongoose", "nodemailer"
-
-
-
-
-
+nodejs, reaxt toast, axios, framer-motion, lucide-react, multiparty, react, react-dom, react-hot-toast, react-router-dom, sortablejs
+tailwindcss, zustand, typescript , "bcryptjs", "cookie-parser", "cors", "crypto", "dotenv", "express", "jsonwebtoken", "mailtrap", "mongoose", "nodemailer"
 
 Taught Process
 
@@ -26,7 +21,7 @@ Create and store the user data on mongo db using jwt or google signin
 
 create a dashbord that leads to Vote creating page , on going vote and vote viewer.
 
-the each user per vote was going to be well implemented using browser finger printing , User email and local storage so only one device can vote, if email  was signed in we store it to mongo db and also store cookies in local storage, to check if each user is unique
+the each user per vote was going to be well implemented using browser finger printing , User email and local storage so only one device can vote, if email was signed in we store it to mongo db and also store cookies in local storage, to check if each user is unique
 
 users can still vote but only once if not signed in
 
@@ -34,11 +29,10 @@ I could use ip address but ip address changes all the time and if two device are
 
 all users cannot vote since they are sharing the same ip .
 
-
+Use npm run dev to start the web app on local host .
 
 Hosted Link
 Frontend : https://insidesuccess-voteapp.vercel.app/
 Backend : https://insidesuccess-voteapp-backend.onrender.com/
-
 
 Progress
