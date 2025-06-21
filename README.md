@@ -29,6 +29,10 @@ I could use ip address but ip address changes all the time and if two device are
 
 all users cannot vote since they are sharing the same ip .
 
+The web app is not complete since now enough time, i stopped at
+
+Mapping created votes polls for decision room.
+
 Use npm run dev to start the web app on local host .
 
 Hosted Link
