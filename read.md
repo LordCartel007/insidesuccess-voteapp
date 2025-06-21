@@ -6,10 +6,9 @@
     you also get welcome email to your inbox.
 
 
-    Technology Used jwt, aws s3 buscket, react vite , mongo db , mongoose, express , react google auth, tailwind , css , styledcomponent css
+    Technology Used jwt, aws s3 bucket, react vite , mongo db , mongoose, express , react google auth, tailwind , css , styledcomponent css
     nodejs, reaxt toast, axios,  framer-motion, lucide-react, multiparty, react, react-dom, react-hot-toast, react-router-dom, sortablejs
-    tailwindcss, zustand, typescript , "bcryptjs", "cookie-parser",   "cors",  "crypto",  "dotenv",  "express",   "jsonwebtoken",  "mailtrap",
-      "mongoose", "nodemailer"
+    tailwindcss, zustand, typescript , "bcryptjs", "cookie-parser",   "cors",  "crypto",  "dotenv",  "express",   "jsonwebtoken",  "mailtrap", "mongoose", "nodemailer"
 
 
 
@@ -22,9 +21,7 @@
 
     create a dashbord that leads to Vote creating page , on going vote and vote viewer.
 
-    the each user per vote was going to be well implemented using browser finger printing so
-
-    only one device can vote, email if signed in and storing cookies in local storage.
+    the each user per vote was going to be well implemented using browser finger printing , User email and local storage so only one device can vote, if email  was signed in we store it to mongo db and also store cookies in local storage, to check if each user is unique
 
     I could use ip address but ip address changes all the time and if two device are on the same wifi , almost
 
@@ -39,6 +36,4 @@
 
     Progress
 
-    I didnt quite finish since it takes weeks to complete a fullstack app.
-
-    Frontend is ready to view on production remaining backend hosting.
+ready to view
