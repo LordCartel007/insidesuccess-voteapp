@@ -34,7 +34,7 @@
 
     all users cannot vote since they are sharing the same ip .
 
-
+    Use npm run dev to start the web app on local host .
 
     Hosted Link
     Frontend : https://insidesuccess-voteapp.vercel.app/
